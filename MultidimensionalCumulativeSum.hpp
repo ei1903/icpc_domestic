@@ -2,7 +2,8 @@ template<class T>
 struct MultidimensionalCumulativeSum {
 private:
     const int d;
-    std::vector<T> cum, mul;
+    std::vector<T> cum;
+    std::vector<int> mul;
     const std::vector<int> sz;
 
     int convert(const std::vector<int> &v) {
