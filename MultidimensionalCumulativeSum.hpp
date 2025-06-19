@@ -53,7 +53,7 @@ public:
             if (i == d - 1) {
                 mul.emplace_back(1);
             } else {
-                mul.emplace_back(mul.back() * (sz[i] + 1));
+                mul.emplace_back(mul.back() * (sz[i + 1] + 1));
             }
         }
         std::reverse(mul.begin(), mul.end());
@@ -67,18 +67,20 @@ public:
         cum[convert(v)] += val;
     }
 
+    // [0, v)
     T get(const std::vector<int> &v) {
-        return (cum[convert(v)]);
+        return (cum[convert(v)] - accumulate(mul.begin(), mul.end(), 0));
     }
 
+    // [l, h)
     T get(const std::vector<int> &l, const std::vector<int> &h) {
-        const int k = convert(h);
+        const int k = convert(h) - accumulate(mul.begin(), mul.end(), 0);
         T ret = T();
         for (int bit = 0; bit < 1 << d; ++bit) {
             int v = k;
             for (int i = 0; i < d; ++i) {
                 if (bit >> i & 1) {
-                    v -= mul[i] * (h[i] - l[i] + 1);
+                    v -= mul[i] * (h[i] - l[i]);
                 }
             }
             if (__builtin_popcount(bit) & 1) {
